@@ -6,9 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initBeforeAfterSlider();
-    initSavingsCalculator();
     initFabricStudio();
-    initPhotoQuoteModal();
     initAnimatedCounters();
     initFaqAccordion();
     initDiscoveryForm();
@@ -112,65 +110,7 @@ function initBeforeAfterSlider() {
 }
 
 /* ==========================================================================
-   3. Interactive ROI / Savings Calculator
-   ========================================================================== */
-function initSavingsCalculator() {
-    const qtySlider = document.getElementById('calcQty');
-    const qtyDisplay = document.getElementById('qtyDisplay');
-    const typePills = document.querySelectorAll('.type-pill');
-    
-    const newCostEl = document.getElementById('newCostVal');
-    const renewCostEl = document.getElementById('renewCostVal');
-    const savingsEl = document.getElementById('totalSavingsVal');
-    const savingsPercentEl = document.getElementById('savingsPercentVal');
-    const co2El = document.getElementById('co2SavingsVal');
-
-    if (!qtySlider || !qtyDisplay || !newCostEl || !renewCostEl || !savingsEl) return;
-
-    const pricingData = {
-        'koltuk': { new: 7500, renew: 2200, co2: 24 },
-        'kanepe': { new: 24000, renew: 7500, co2: 68 },
-        'masa': { new: 12000, renew: 3600, co2: 45 }
-    };
-
-    let currentType = 'koltuk';
-
-    function calculate() {
-        const qty = parseInt(qtySlider.value, 10);
-        qtyDisplay.textContent = `${qty} Adet`;
-
-        const rates = pricingData[currentType] || pricingData['koltuk'];
-        const totalNew = qty * rates.new;
-        const totalRenew = qty * rates.renew;
-        const totalSavings = totalNew - totalRenew;
-        const savingsPercent = Math.round((totalSavings / totalNew) * 100);
-        const totalCo2 = Math.round(qty * rates.co2);
-
-        const formatTR = (num) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 }).format(num);
-
-        newCostEl.textContent = formatTR(totalNew);
-        renewCostEl.textContent = formatTR(totalRenew);
-        savingsEl.textContent = formatTR(totalSavings);
-        if (savingsPercentEl) savingsPercentEl.textContent = `%${savingsPercent}`;
-        if (co2El) co2El.textContent = `${totalCo2.toLocaleString('tr-TR')} kg CO₂ Tasarrufu`;
-    }
-
-    qtySlider.addEventListener('input', calculate);
-
-    typePills.forEach(pill => {
-        pill.addEventListener('click', () => {
-            typePills.forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            currentType = pill.dataset.type || 'koltuk';
-            calculate();
-        });
-    });
-
-    calculate();
-}
-
-/* ==========================================================================
-   4. Interactive Fabric & Color Studio (Mini Configurator)
+   3. Interactive Fabric & Color Studio (Mini Configurator)
    ========================================================================== */
 function initFabricStudio() {
     const swatches = document.querySelectorAll('.swatch-btn');
@@ -251,157 +191,7 @@ function initFabricStudio() {
 }
 
 /* ==========================================================================
-   5. Photo Upload Quote Modal (Drag & Drop + WhatsApp Flow)
-   ========================================================================== */
-function initPhotoQuoteModal() {
-    const modalOverlay = document.getElementById('photoQuoteModal');
-    const openBtns = document.querySelectorAll('.open-photo-modal');
-    const closeBtn = document.getElementById('closePhotoModal');
-    const dropZone = document.getElementById('photoDropZone');
-    const fileInput = document.getElementById('photoFileInput');
-    const previewContainer = document.getElementById('modalImagePreview');
-    const previewImg = document.getElementById('previewImgTag');
-    const removeImgBtn = document.getElementById('removePhotoBtn');
-    const modalForm = document.getElementById('photoQuoteForm');
-
-    if (!modalOverlay) return;
-
-    function openModal() {
-        modalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        modalOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    openBtns.forEach(btn => btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openModal();
-    }));
-
-    closeBtn?.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) closeModal();
-    });
-
-    // Handle File Drop / Select
-    function handleFile(file) {
-        if (!file || !file.type.startsWith('image/')) {
-            alert('Lütfen geçerli bir görsel dosyası seçin (JPG veya PNG).');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            if (previewImg && previewContainer) {
-                previewImg.src = e.target.result;
-                previewContainer.style.display = 'block';
-                if (dropZone) dropZone.style.display = 'none';
-            }
-        };
-        reader.readAsDataURL(file);
-    }
-
-    fileInput?.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            handleFile(e.target.files[0]);
-        }
-    });
-
-    dropZone?.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-    });
-
-    dropZone?.addEventListener('dragleave', () => {
-        dropZone.classList.remove('dragover');
-    });
-
-    dropZone?.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        if (e.dataTransfer.files.length > 0) {
-            handleFile(e.dataTransfer.files[0]);
-        }
-    });
-
-    removeImgBtn?.addEventListener('click', () => {
-        if (previewContainer && dropZone && fileInput) {
-            previewContainer.style.display = 'none';
-            dropZone.style.display = 'block';
-            fileInput.value = '';
-        }
-    });
-
-    // Form Submission: Send to Backend API with Graceful Fallback
-    modalForm?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const phone = document.getElementById('modalPhone')?.value || '';
-        const qty = document.getElementById('modalQty')?.value || '1';
-        const note = document.getElementById('modalNote')?.value || '';
-        const file = fileInput?.files?.[0];
-
-        const submitBtn = modalForm.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.innerHTML = 'Yükleniyor ve Kaydediliyor...';
-        submitBtn.disabled = true;
-
-        const formData = new FormData();
-        formData.append('phone', phone);
-        formData.append('quantity', qty);
-        formData.append('notes', note);
-        if (file) {
-            formData.append('photo', file);
-        }
-
-        try {
-            // Send to Python Starlette/FastAPI backend
-            const response = await fetch('http://127.0.0.1:8000/api/upload-quote', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                alert(`Harika! Talebiniz ve fotoğrafınız sisteme kaydedildi (Talep No: #${data.lead_id}). Sizi 24 saat içinde arayacağız.`);
-                
-                // Optional: Open WhatsApp with lead reference
-                const messageText = `Merhaba Mobimobi! Web sitenizden #${data.lead_id} numaralı keşif talebimi ve fotoğrafımı ilettim. Telefon: ${phone}`;
-                window.open(`https://wa.me/905422670988?text=${encodeURIComponent(messageText)}`, '_blank');
-                
-                closeModal();
-                modalForm.reset();
-                if (previewContainer && dropZone) {
-                    previewContainer.style.display = 'none';
-                    dropZone.style.display = 'block';
-                }
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.disabled = false;
-                return;
-            }
-        } catch (err) {
-            console.warn('Backend API çevrimdışı, doğrudan WhatsApp fallback devreye giriyor:', err);
-        } finally {
-            submitBtn.innerHTML = originalBtnText;
-            submitBtn.disabled = false;
-        }
-
-        // Fallback if backend is offline:
-        const messageText = `Merhaba Mobimobi! Mobilya yenileme fiyatı almak istiyorum.%0A%0A📱 Telefonum: ${encodeURIComponent(phone)}%0A🪑 Adet: ${encodeURIComponent(qty)}%0A📝 Notum: ${encodeURIComponent(note)}%0A%0AFotoğrafı bu mesajın hemen ardından gönderiyorum.`;
-        window.open(`https://wa.me/905422670988?text=${messageText}`, '_blank');
-        closeModal();
-        modalForm.reset();
-        if (previewContainer && dropZone) {
-            previewContainer.style.display = 'none';
-            dropZone.style.display = 'block';
-        }
-    });
-}
-
-/* ==========================================================================
-   6. Animated Stat Counters (IntersectionObserver)
+   4. Animated Stat Counters (IntersectionObserver)
    ========================================================================== */
 function initAnimatedCounters() {
     const trustNumbers = document.querySelectorAll('.trust-number');
