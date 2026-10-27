@@ -1544,104 +1544,521 @@ footer.site-footer {
 
 @media (max-width: 768px) {
     :root {
-        --header-height: 70px;
+        --header-height: 64px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .container {
+        padding: 0 16px;
+    }
+
+    /* 1. Header & Mobile Menu */
+    .header-container {
+        padding: 0 16px !important;
+        gap: 12px !important;
+        height: var(--header-height) !important;
+    }
+
+    .brand-logo {
+        margin-right: 0 !important;
+    }
+
+    .site-logo-img {
+        height: 38px !important;
+        max-width: 135px !important;
     }
 
     .mobile-toggle {
-        display: flex;
+        display: flex !important;
     }
 
     .nav-menu {
-        position: fixed;
-        top: var(--header-height);
-        left: 0;
-        width: 100%;
-        height: calc(100vh - var(--header-height));
-        background: var(--white);
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 30px 24px;
-        gap: 24px;
-        transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        overflow-y: auto;
+        position: fixed !important;
+        top: var(--header-height) !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: calc(100vh - var(--header-height)) !important;
+        background: var(--white) !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 20px 16px 40px !important;
+        gap: 16px !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow-y: auto !important;
+        z-index: 9999 !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
     }
 
     .nav-menu.open {
-        transform: translateX(0);
+        transform: translateX(0) !important;
     }
 
     .nav-links {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        gap: 16px;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        gap: 8px !important;
     }
 
     .nav-link {
-        font-size: 1.15rem;
-        width: 100%;
-        padding: 10px 0;
+        font-size: 1.05rem !important;
+        width: 100% !important;
+        padding: 12px 14px !important;
+        border-radius: var(--radius-sm) !important;
+        background: var(--slate-50) !important;
+        color: var(--slate-800) !important;
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+
+    .nav-link.active {
+        background: var(--primary-light) !important;
+        color: var(--primary) !important;
+    }
+
+    .nav-link.active::after {
+        display: none !important;
     }
 
     .dropdown-menu {
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        box-shadow: none;
-        border: none;
-        background: var(--slate-50);
-        margin-top: 8px;
-        width: 100%;
+        position: static !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+        border: 1px solid var(--slate-200) !important;
+        background: var(--white) !important;
+        margin-top: 6px !important;
+        width: 100% !important;
+        padding: 8px !important;
     }
 
-    .hero-grid, .calculator-card, .discovery-grid, .zigzag-block, .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
+    .header-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 8px !important;
+        padding-top: 16px !important;
+        border-top: 1px solid var(--slate-200) !important;
     }
 
-    .zigzag-block.reverse {
-        direction: ltr;
+    .header-actions .btn,
+    .header-actions .phone-quicklink {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px 16px !important;
+        font-size: 0.95rem !important;
+    }
+
+    /* 2. Hero Section */
+    .hero-section {
+        padding: 30px 0 45px !important;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr !important;
+        gap: 28px !important;
+    }
+
+    .hero-content {
+        gap: 16px !important;
+        align-items: stretch !important;
+        text-align: left !important;
     }
 
     .hero-title {
-        font-size: 2.3rem;
+        font-size: clamp(1.85rem, 7.5vw, 2.35rem) !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.5px !important;
+    }
+
+    .hero-description {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+
+    .hero-cta-group {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 6px !important;
+    }
+
+    .hero-cta-group .btn {
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 1rem !important;
+    }
+
+    .hero-trust {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        padding-top: 18px !important;
+        margin-top: 8px !important;
+    }
+
+    .trust-item {
+        background: var(--white) !important;
+        padding: 12px 10px !important;
+        border-radius: var(--radius-md) !important;
+        border: 1px solid var(--slate-200) !important;
+        box-shadow: var(--shadow-subtle) !important;
+        text-align: center !important;
+    }
+
+    .trust-number {
+        font-size: 1.35rem !important;
+    }
+
+    .trust-label {
+        font-size: 0.78rem !important;
+    }
+
+    .hero-visual {
+        width: 100% !important;
     }
 
     .hero-card-main {
-        height: 340px;
+        height: 250px !important;
+        border-radius: var(--radius-lg) !important;
+        border-width: 2px !important;
     }
 
     .hero-floating-badge {
-        position: static;
-        margin-top: 16px;
+        position: static !important;
+        margin-top: 12px !important;
+        padding: 14px 16px !important;
+        border-radius: var(--radius-md) !important;
+        animation: none !important;
     }
 
-    .cards-grid, .testimonials-grid {
-        grid-template-columns: 1fr;
+    /* 3. Marquee */
+    .marquee-bar {
+        padding: 12px 0 !important;
+    }
+    .marquee-item {
+        font-size: 0.92rem !important;
+        gap: 10px !important;
+    }
+
+    /* 4. Section Headers */
+    .section-header {
+        margin-bottom: 28px !important;
+    }
+
+    .section-header h2 {
+        font-size: clamp(1.6rem, 6vw, 1.95rem) !important;
+        line-height: 1.25 !important;
+        margin-bottom: 10px !important;
+    }
+
+    .section-header p {
+        font-size: 0.95rem !important;
+        line-height: 1.55 !important;
+    }
+
+    /* 5. Before / After Slider */
+    .before-after-section {
+        padding: 45px 0 !important;
+    }
+
+    .ba-slider-container {
+        aspect-ratio: 4 / 3 !important;
+        border-radius: var(--radius-lg) !important;
+        border-width: 2px !important;
+    }
+
+    .ba-label {
+        padding: 5px 10px !important;
+        font-size: 0.7rem !important;
+        bottom: 10px !important;
+    }
+
+    .label-before {
+        right: 10px !important;
+    }
+
+    .label-after {
+        left: 10px !important;
+    }
+
+    .ba-handle {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 1rem !important;
+    }
+
+    /* 6. Studio / Mini Configurator */
+    .studio-section {
+        padding: 45px 0 !important;
+    }
+
+    .studio-grid {
+        grid-template-columns: 1fr !important;
+        gap: 22px !important;
+    }
+
+    .studio-preview-box {
+        aspect-ratio: 4 / 3 !important;
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .studio-badge {
+        top: 12px !important;
+        left: 12px !important;
+        padding: 5px 12px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .studio-swatches-card {
+        padding: 20px 16px !important;
+        border-radius: var(--radius-lg) !important;
+        gap: 18px !important;
+    }
+
+    .swatches-row {
+        gap: 10px !important;
+    }
+
+    .swatch-btn {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    .spec-details-box {
+        padding: 14px 12px !important;
+        gap: 8px !important;
+    }
+
+    .spec-item {
+        font-size: 0.85rem !important;
+    }
+
+    /* 7. Savings Calculator */
+    .calculator-section {
+        padding: 45px 0 !important;
+    }
+
+    .calculator-card {
+        padding: 20px 14px !important;
+        border-radius: var(--radius-lg) !important;
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+    }
+
+    .calc-inputs {
+        gap: 20px !important;
+    }
+
+    .calc-furniture-types {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    .type-pill {
+        padding: 12px 14px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .calc-results {
+        padding: 20px 16px !important;
+        border-radius: var(--radius-lg) !important;
+        gap: 18px !important;
+    }
+
+    .calc-savings-highlight {
+        font-size: 2.1rem !important;
+    }
+
+    .breakdown-row {
+        font-size: 0.85rem !important;
+    }
+
+    /* 8. Services & Sectors */
+    .services-section {
+        padding: 45px 0 !important;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+
+    .service-card {
+        border-radius: var(--radius-md) !important;
+    }
+
+    .service-card-img {
+        height: 180px !important;
+    }
+
+    .service-card-body {
+        padding: 20px 16px !important;
+    }
+
+    .service-card-body h3 {
+        font-size: 1.2rem !important;
     }
 
     .sectors-row {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        margin-top: 32px !important;
+    }
+
+    .sector-item {
+        padding: 16px 10px !important;
+        border-radius: var(--radius-md) !important;
+        gap: 8px !important;
+    }
+
+    .sector-icon {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1.2rem !important;
+    }
+
+    .sector-item span {
+        font-size: 0.82rem !important;
+    }
+
+    /* 9. Process Steps */
+    .process-section {
+        padding: 45px 0 !important;
     }
 
     .process-timeline {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+        margin-top: 24px !important;
     }
 
-    .footer-top {
-        grid-template-columns: 1fr;
+    .process-step {
+        padding: 20px 16px !important;
+        border-radius: var(--radius-md) !important;
+        gap: 12px !important;
     }
 
-    .footer-bottom {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
+    /* 10. Discovery Form */
+    .discovery-section {
+        padding: 45px 0 !important;
+    }
+
+    .discovery-grid {
+        grid-template-columns: 1fr !important;
+        gap: 28px !important;
+    }
+
+    .discovery-content h2 {
+        font-size: 1.85rem !important;
+        line-height: 1.25 !important;
+    }
+
+    .perks-list {
+        gap: 12px !important;
+    }
+
+    .form-box {
+        padding: 22px 16px !important;
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .form-box h3 {
+        font-size: 1.3rem !important;
     }
 
     .form-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+
+    .form-control {
+        font-size: 16px !important; /* Critical to prevent iOS Safari auto-zoom */
+        padding: 12px 14px !important;
+    }
+
+    /* 11. Footer */
+    footer.site-footer {
+        padding: 45px 0 24px !important;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        margin-bottom: 30px !important;
+    }
+
+    .footer-bottom {
+        flex-direction: column !important;
+        gap: 14px !important;
+        text-align: center !important;
+        padding-top: 20px !important;
+    }
+
+    .dev-signature {
+        width: 100% !important;
+        max-width: 280px !important;
+        justify-content: center !important;
+    }
+
+    .quick-quote-launcher {
+        display: none !important;
+    }
+
+    .whatsapp-floating {
+        bottom: 18px !important;
+        right: 18px !important;
+        width: 52px !important;
+        height: 52px !important;
+        font-size: 1.5rem !important;
+    }
+
+    /* 12. Subpages (Hakkımızda, Süreç, Avantajlarımız, SSS, İletişim) */
+    .page-hero {
+        padding: 40px 0 28px !important;
+    }
+
+    .page-hero h1 {
+        font-size: 1.95rem !important;
+    }
+
+    .page-hero p {
+        font-size: 0.98rem !important;
+    }
+
+    .zigzag-block {
+        grid-template-columns: 1fr !important;
+        gap: 22px !important;
+        margin-bottom: 40px !important;
+    }
+
+    .zigzag-block.reverse {
+        direction: ltr !important;
+    }
+
+    .zigzag-img {
+        aspect-ratio: 16 / 10 !important;
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .zigzag-text h2 {
+        font-size: 1.5rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 28px !important;
+        margin: 28px 0 45px !important;
+    }
+
+    .map-embed-wrapper {
+        min-height: 260px !important;
     }
 }
 
@@ -1954,14 +2371,6 @@ footer.site-footer {
     box-shadow: var(--shadow-primary);
 }
 
-@media (max-width: 768px) {
-    .studio-grid {
-        grid-template-columns: 1fr;
-    }
-    .quick-quote-launcher {
-        display: none; /* On mobile, the WhatsApp icon is sufficient */
-    }
-}
 
 
 /* ==========================================================================
